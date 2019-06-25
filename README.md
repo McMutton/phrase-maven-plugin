@@ -24,6 +24,9 @@ build process from [PhraseApp API v2](http://docs.phraseapp.com/api/v2/).
             <messagesFolderName>YOUR_MESSAGES_FOLDERNAME(default:messages/)</messagesFolderName>
             <messageFilePrefix>YOUR_MESSAGE_FILE_PREFIX(default:messages_)</messageFilePrefix>
             <messageFilePostfix>YOUR_MESSAGE_FILE_POSTFIX(default:.properties)</messageFilePostfix> 
+            <branches>
+                <branch>BRANCH_YOU_WANT_TO_WORK_WITH(defaut:master)</branch>
+            </branches>
         </configuration>
         <executions>
             <execution>
@@ -33,3 +36,19 @@ build process from [PhraseApp API v2](http://docs.phraseapp.com/api/v2/).
             </execution>
         </executions>
     </plugin>
+
+### Branch configuration guide
+
+In order to work only with the master phraseapp branch, either skip the branch configuration completely, or have the following:
+
+    <branches>
+        <branch>master</branch>
+    </branches>
+    
+To work with multiple branches, list them all (including the master branch if you want to work with it) under the `<branches>` tag. 
+   
+    <branches>
+        <branch>master</branch>
+        <branch>temp</branch>
+        <branch>demo</demo>
+    </branches>

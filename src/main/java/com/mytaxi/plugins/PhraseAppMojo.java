@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.mytaxi.apis.phrase.tasks.PhraseAppSyncTask;
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,6 +33,7 @@ public class PhraseAppMojo extends AbstractMojo
 {
 
     private static final String GENERATED_RESOURCES = "/generated-resources/";
+    private static final String DEFAULT_BRANCH = "master";
 
     /**
      * Phraseapp API endpoint.
@@ -56,6 +58,12 @@ public class PhraseAppMojo extends AbstractMojo
      */
     @Parameter(property = "projectId", required = true)
     private String projectId;
+
+    /**
+     * Names of the branches you want to download apart from the master branch. Default: { "master" }
+     */
+    @Parameter(property = "branches")
+    private String[] branches;
 
     /**
      * Location directory of the messages folder. Default: ${project.build.directory}/generated-resources/
@@ -101,12 +109,19 @@ public class PhraseAppMojo extends AbstractMojo
     {
         checkRequiredConfigurations();
 
+        // Setting default values for configuration parameters are problematic.
+        // This is why we are setting the default value here.
+        if (branches.length <= 0)
+        {
+            branches = new String[] {DEFAULT_BRANCH};
+        }
+
         getLog().info("Start downloading message resources ...");
 
         try
         {
             final URL parsedURL = new URL(url);
-            PhraseAppSyncTask phraseAppSyncTask = new PhraseAppSyncTask(authToken, projectId, parsedURL.getProtocol(), createHost(parsedURL));
+            PhraseAppSyncTask phraseAppSyncTask = new PhraseAppSyncTask(authToken, projectId, Arrays.asList(branches), parsedURL.getProtocol(), createHost(parsedURL));
             configure(phraseAppSyncTask);
             phraseAppSyncTask.run();
         }
